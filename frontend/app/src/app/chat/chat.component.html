@@ -1,0 +1,154 @@
+<body>
+  <div class="container-fluid h-100 mt-5">
+    <div class="row justify-content-center h-100">
+
+      <div class="col-md-0 col-xl-1 order-lg-1"></div>
+      <!-- =======================left Body================================ -->
+      <div class="col-md-4 col-xl-2 chat order-last order-lg-2">
+        <div class="card mb-sm-3 mb-md-0 contacts_card">
+          <div class="card-header">
+            <h1 class="chat-list-title">All User</h1>
+          </div>
+          <div class="card-body contacts_body ">
+            <ul class="contacts chatList" *ngFor="let presentation of alluser">
+              <li *ngIf="presentation.userName != check">
+                <div class="d-flex bd-highlight">
+                  <div class="img_cont">
+                    <div class="rounded-circle user_img text_inside_circle">
+                      {{presentation.userName.substring(0,1)}}
+                    </div>
+
+                  </div>
+                  <div class="user_info" (click)="goToChat(presentation.userName)">
+                    <!-- {{chats.secondUserName}}  -->
+                    <div style="margin-top: 1rem;">
+                      {{presentation.userName}}</div>
+                    <br>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="card-footer"></div>
+        </div>
+      </div>
+
+      <div class="col-md-0 col-xl-1 order-lg-3"></div>
+
+      <!-- =============================Middle Body============================= -->
+      <div class="col-md-8 col-xl-5 chat order-md-1 order-lg-4">
+        <div class="card">
+
+
+          <div class="card-header msg_head">
+            <div class="d-flex bd-highlight">
+              <div class="img_cont">
+                <div class="rounded-circle user_img text_inside_circle1" *ngIf="secondUserName!=senderCheck">
+                  {{secondUserName.substring(0,1)}}</div>
+                <div class="rounded-circle user_img text_inside_circle1" *ngIf="secondUserName==senderCheck">
+                  {{firstUserName.substring(0,1)}}</div>
+              </div>
+              <div class="user_info">
+                <span *ngIf="secondUserName!=senderCheck">{{secondUserName}}</span>
+                <span *ngIf="secondUserName==senderCheck">{{firstUserName}}</span>
+                <p>Message</p>
+              </div>
+              <div class="video_cam">
+              </div>
+            </div>
+            <span id="action_menu_btn">
+              <!-- <i class="fa fa-house" style="margin-right: 1.5rem;" (click)="routeHome()"></i> -->
+              <!-- <i class="fa fa-xmark" style="margin-right: 0.5rem;" (click)="routeX()"></i> -->
+              <!-- <span style="margin-right: 0.5rem;" (click)="routeX()">Logout</span> -->
+            </span>
+          </div>
+          <div class="card-body msg_card_body" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+
+            <div *ngFor="let msg of messageList">
+
+              <div class="d-flex justify-content-end mb-4" *ngIf="msg.senderEmail==senderCheck">
+                <div class="msg_cotainer_send">
+                  <!-- {{msg.replymessage | json}} -->
+                  {{msg.replymessage}}
+
+
+                  <span class="msg_time_send">{{msg.time.substring(11,16)}}</span>
+                </div>
+                <div class="img_cont_msg">
+                  <span
+                    class="rounded-circle user_img_msg text_inside_circle2">{{msg.senderEmail.substring(0,1)}}</span>
+                </div>
+              </div>
+
+
+              <div class="d-flex justify-content-start mb-4" *ngIf="msg.senderEmail!=senderCheck">
+                <div class="img_cont_msg">
+                  <span
+                    class="rounded-circle user_img_msg text_inside_circle3">{{msg.senderEmail.substring(0,1)}}</span>
+                </div>
+                <div class="msg_cotainer">
+                  {{msg.replymessage}}
+                  <span class="msg_time">{{msg.time.substring(11,16)}}</span>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+          <div class="card-footer">
+            <form [formGroup]="chatForm">
+              <div class="input-group">
+                <div class="input-group-append">
+                  <span class="input-group-text attach_btn"></span>
+                </div>
+                <textarea name="" class="form-control type_msg" placeholder="Type your message..."
+                  formControlName="replymessage" (keyup.enter)="sendMessage()"></textarea>
+                <div class="input-group-append">
+                  <button mat-raised-button class="input-group-text send_btn" (click)="sendMessage()">
+                    <i class="fa fa-location-arrow"></i> </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========================Right Body========================= -->
+      <div class="col-md-4 col-xl-2 chat order-md-2 order-lg-5">
+        <div class="card mb-sm-3 mb-md-0 contacts_card">
+          <div class="card-header">
+            <h1 class="chat-list-title">Chat List</h1>
+          </div>
+          <div class="card-body contacts_body ">
+            <ul class="contacts chatList" *ngFor="let chats of chatList">
+              <li>
+                <div class="d-flex bd-highlight" (click)="loadChatByEmail(chats.secondUserName, chats.firstUserName)">
+                  <div class="img_cont">
+                    <div class="rounded-circle user_img text_inside_circle" *ngIf="chats.secondUserName!=senderCheck">
+                      {{chats.secondUserName.substring(0,1)}}
+                    </div>
+                    <div class="rounded-circle user_img text_inside_circle" *ngIf="chats.secondUserName==senderCheck">
+                      {{chats.firstUserName.substring(0,1)}}
+                    </div>
+
+                  </div>
+                  <div class="user_info">
+                    <div *ngIf="chats.secondUserName!=senderCheck" style="margin-top: 1rem;">
+                      {{chats.secondUserName}}</div>
+                    <div *ngIf="chats.secondUserName==senderCheck" style="margin-top: 1rem;">
+                      {{chats.firstUserName}}</div>
+                    <br>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="card-footer"></div>
+        </div>
+      </div>
+
+      <div class="col-md-0 col-xl-1 order-lg-6"></div>
+    </div>
+  </div>
+</body>

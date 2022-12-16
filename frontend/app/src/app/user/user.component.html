@@ -1,0 +1,107 @@
+<div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+    <a class="navbar-brand ml-sm-5" href="#">Chat UI</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0">
+        <span *ngIf="loggedOut">
+          <button class="btn btn-primary mr-sm-5 my-2 my-sm-0" type="submit" data-toggle="modal"
+            data-target="#exampleModalCenter">Add User</button>
+
+          <button class="btn btn-success mr-sm-5 my-2 my-sm-0" type="submit" data-toggle="modal"
+            data-target="#exampleModalCenter2">Login</button>
+        </span>
+
+        <span *ngIf="loggedIn">
+          <button class="btn btn-success mr-sm-5 my-2 my-sm-0" type="submit" routerLink="chat" *ngIf="chatbox">My
+            Chats</button>
+          <button class="btn btn-danger mr-sm-5 my-2 my-sm-0" type="submit" (click)="logout()">LogOut</button>
+        </span>
+      </form>
+    </div>
+  </nav>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Enter User Name</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- ========================= -->
+        <form [formGroup]="registerForm">
+          <div class="form-group text-center">
+            <input type="text" class="form-control" formControlName="username" id="exampleInputEmail1"
+              aria-describedby="emailHelp">
+          </div>
+          <div class="text-center">
+            <button type="submit" (click)="adduser()" class="btn btn-primary btn-sm">Add User</button>
+          </div>
+          <div class="text-center mt-3">
+            <div class="small alert alert-danger feild" role="alert" *ngIf="
+                          registerForm.controls['username'].touched &&
+                          registerForm.controls['username'].invalid &&
+                          registerForm.controls['username'].errors?.['required']
+                        " style="color: red">Please enter username*
+            </div>
+            <div class="small alert alert-{{alert}} feild" role="alert" *ngIf="successregister">{{registermsg}}
+            </div>
+          </div>
+        </form>
+        <!-- ========================= -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Enter User Name</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- ========================= -->
+        <form [formGroup]="loginForm">
+          <div class="form-group text-center">
+            <input type="text" class="form-control" formControlName="username" id="exampleInputEmail2"
+              aria-describedby="emailHelp">
+          </div>
+          <div class="text-center">
+            <button type="submit" (click)="login()" class="btn btn-primary btn-sm">Login</button>
+          </div>
+          <div class="text-center mt-3">
+            <div class="small alert alert-danger feild" role="alert" *ngIf="
+                          loginForm.controls['username'].touched &&
+                          loginForm.controls['username'].invalid &&
+                          loginForm.controls['username'].errors?.['required']
+                        " style="color: red">Please enter username*
+            </div>
+            <div class="small alert alert-{{alert2}} feild" role="alert" *ngIf="successlogin">{{loginmsg}}
+            </div>
+          </div>
+        </form>
+        <!-- ========================= -->
+      </div>
+    </div>
+  </div>
+</div>

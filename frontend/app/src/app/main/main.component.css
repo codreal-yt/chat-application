@@ -1,0 +1,15 @@
+.user {
+    border: 1px solid blueviolet;
+    border-radius: 6px;
+    margin: 4px 4px 4px 4px;
+    background: cornsilk;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.user:hover {
+    border: 1px solid red;
+    background: gainsboro;
+    /* box-shadow: 0 2px 1px 0 (0.5); */
+}
