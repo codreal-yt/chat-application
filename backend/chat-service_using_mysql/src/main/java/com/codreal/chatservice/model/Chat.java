@@ -1,21 +1,22 @@
 package com.codreal.chatservice.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.List;
 
-@Document(collection = "chats")
+@Table(name="chats")
+@Entity
 public class Chat {
 
-    @Transient
-    public static final String SEQUENCE_NAME = "chat_sequence";
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int chatId;
     private String firstUserName;
     private String secondUserName;
+
+    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Message> messageList;
 
     public Chat() {

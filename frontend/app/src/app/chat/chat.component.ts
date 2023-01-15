@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Chat } from '../models/chat';
@@ -35,22 +35,42 @@ export class ChatComponent implements OnInit {
   senderEmail = sessionStorage.getItem('username');
   senderCheck = sessionStorage.getItem('username');
 
-  constructor(private chatService: ChatService, private router: Router, private userService: UserService) {
+  constructor(
+    private chatService: ChatService, 
+    private router: Router, 
+    private userService: UserService,
+    private cdref: ChangeDetectorRef) {
+
     this.chatForm = new FormGroup({
       replymessage: new FormControl()
     });
 
   }
 
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+  }
+  
+
   ngOnInit(): void {
     setInterval(() => {
       this.chatService.getChatById(sessionStorage.getItem('chatId')).subscribe(data => {
         this.chatData = data;
-        this.messageList = this.chatData.messageList;
         this.secondUserName = this.chatData.secondUserName;
         this.firstUserName = this.chatData.firstUserName;
+
+
+        this.chatService.getAllMessagesByChatId(this.chatId).subscribe(data => {
+        console.log(data);
+        this.chatData = data;
+        this.messageList = this.chatData;
       });
+      });
+
     }, 1000);
+
+
+    this.cdref.detectChanges();
 
 
     let getByname = setInterval(() => {
@@ -101,9 +121,14 @@ export class ChatComponent implements OnInit {
       setInterval(() => {
         this.chatService.getChatById(this.chatId).subscribe(data => {
           this.chatData = data;
-          this.messageList = this.chatData.messageList;
           this.secondUserName = this.chatData.secondUserName;
           this.firstUserName = this.chatData.firstUserName;
+
+          this.chatService.getAllMessagesByChatId(this.chatId).subscribe(data => {
+            console.log(data);
+            this.chatData = data;
+            this.messageList = this.chatData;
+          });
         });
       }, 1000)
 
@@ -117,12 +142,14 @@ export class ChatComponent implements OnInit {
     // This will call the update chat method when ever user send the message
     this.messageObj.replymessage = this.chatForm.value.replymessage;
     this.messageObj.senderEmail = this.senderEmail;
-    this.chatService.updateChat(this.messageObj, this.chatId).subscribe(data => {
+    this.chatObj.chatId = this.chatId;
+    this.messageObj.chat = this.chatObj;
+    this.chatService.addMessageToChatRoom(this.messageObj).subscribe(data => {
       console.log(data);
       this.chatForm.reset();
 
       // for displaying the messageList by the chatId
-      this.chatService.getChatById(this.chatId).subscribe(data => {
+      this.chatService.getAllMessagesByChatId(this.chatId).subscribe(data => {
         console.log(data);
         this.chatData = data;
         // console.log(this.chatData.messageList);console.log(JSON.stringify(this.chatData.messageList));
@@ -131,7 +158,9 @@ export class ChatComponent implements OnInit {
         this.firstUserName = this.chatData.firstUserName;
 
       })
-    })
+    });
+
+
   }
 
   routeX() {

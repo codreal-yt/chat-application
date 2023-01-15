@@ -26,4 +26,8 @@ public interface ChatService {
     HashSet<Chat> getChatByFirstUserNameAndSecondUserName(String firstUserName, String secondUserName)  throws ChatNotFoundException;
 
     Chat addMessage(Message add, int chatId)  throws ChatNotFoundException;
+
+    Message addMessage2(Message message);
+
+    List<Message> getAllMessagesInChat(int chatId) throws NoChatExistsInTheRepository;
 }

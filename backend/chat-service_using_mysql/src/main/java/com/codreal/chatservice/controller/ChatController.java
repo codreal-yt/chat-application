@@ -6,7 +6,6 @@ import com.codreal.chatservice.exceptions.NoChatExistsInTheRepository;
 import com.codreal.chatservice.model.Chat;
 import com.codreal.chatservice.model.Message;
 import com.codreal.chatservice.services.ChatService;
-import com.codreal.chatservice.services.SequenceGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +22,6 @@ public class ChatController {
 
     @Autowired
     private ChatService chatService;
-    @Autowired
-    private SequenceGeneratorService sequenceGeneratorService;
 
     @PostMapping("/add")
     public ResponseEntity<Chat> createChat(@RequestBody Chat chat) throws IOException {
@@ -36,12 +33,29 @@ public class ChatController {
         }
     }
 
+    @PostMapping("/add/message1")
+    public ResponseEntity<Message> addMessage2(@RequestBody Message message) throws IOException {
+            return new ResponseEntity<Message>(chatService.addMessage2(message), HttpStatus.CREATED);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<Chat>> getAllChats() {
         try {
             return new ResponseEntity<List<Chat>>(chatService.findallchats(), HttpStatus.OK);
         } catch (NoChatExistsInTheRepository e) {
            return new ResponseEntity("List not found", HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/all/messages/from/chat/{chatId}")
+    public ResponseEntity<?> getAllMessagesInChat(@PathVariable int chatId) {
+        try {
+            Chat chat = new Chat();
+            chat.setChatId(chatId);
+            List<Message> messageList = this.chatService.getAllMessagesInChat(chatId);
+            return ResponseEntity.ok(messageList);
+        } catch (NoChatExistsInTheRepository e) {
+            return new ResponseEntity("Message List not found", HttpStatus.CONFLICT);
         }
     }
 
@@ -103,7 +117,7 @@ public class ChatController {
 
     @PutMapping("/message/{chatId}")
     public ResponseEntity<Chat> addMessage(@RequestBody Message add , @PathVariable int chatId) throws ChatNotFoundException {
-        return new ResponseEntity<Chat>(chatService.addMessage(add,chatId), org.springframework.http.HttpStatus.OK);
+        return new ResponseEntity<Chat>(chatService.addMessage(add,chatId), HttpStatus.OK);
     }
 
 }

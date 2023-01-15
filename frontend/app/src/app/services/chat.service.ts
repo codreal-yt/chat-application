@@ -22,6 +22,14 @@ export class ChatService {
     return this.httpClient.get<Chat>(this.baseUrl + "/chats/" + chatId)
   }
 
+  addMessageToChatRoom(message: Message): Observable<Object> {
+    return this.httpClient.post(this.baseUrl + "/chats/add/message1", message);
+  }
+
+  getAllMessagesByChatId(chatId: any) {
+    return this.httpClient.get<Message[]>(this.baseUrl + "/chats/all/messages/from/chat/" + chatId)
+  }
+
   createChatRoom(chat: Chat): Observable<Object> {
     return this.httpClient.post(this.baseUrl + "/chats/add", chat);
   }

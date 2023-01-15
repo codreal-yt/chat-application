@@ -4,6 +4,7 @@ import com.codreal.chatservice.exceptions.ChatNotFoundException;
 import com.codreal.chatservice.exceptions.NoChatExistsInTheRepository;
 import com.codreal.chatservice.model.Chat;
 import com.codreal.chatservice.model.Message;
+import com.codreal.chatservice.repository.MessageRepository;
 import com.codreal.chatservice.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,28 @@ public class ChatServiceImpl implements ChatService {
 
     @Autowired
     private ChatRepository chatRepository;
+
     @Autowired
-    private SequenceGeneratorService sequenceGeneratorService;
+    private MessageRepository messageRepository;
 
     public Chat addChat(Chat chat) {
-        chat.setChatId(sequenceGeneratorService.generateSequence(Chat.SEQUENCE_NAME));
         return chatRepository.save(chat);
+    }
+
+    @Override
+    public Message addMessage2(Message message) {
+            return messageRepository.save(message);
+    }
+
+    @Override
+    public List<Message> getAllMessagesInChat(int chatId) throws NoChatExistsInTheRepository {
+        Optional<Chat> chat = chatRepository.findById(chatId);
+
+        if(chat.isEmpty()){
+            throw new NoChatExistsInTheRepository();
+        }else {
+            return chat.get().getMessageList();
+        }
     }
 
     @Override
@@ -113,5 +130,7 @@ public class ChatServiceImpl implements ChatService {
             return chatRepository.save(abc);
         }
     }
+
+
 
 }

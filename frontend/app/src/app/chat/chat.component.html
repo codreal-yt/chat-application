@@ -44,9 +44,9 @@
             <div class="d-flex bd-highlight">
               <div class="img_cont">
                 <div class="rounded-circle user_img text_inside_circle1" *ngIf="secondUserName!=senderCheck">
-                  {{secondUserName.substring(0,1)}}</div>
+                  {{secondUserName?.substring(0,1)}}</div>
                 <div class="rounded-circle user_img text_inside_circle1" *ngIf="secondUserName==senderCheck">
-                  {{firstUserName.substring(0,1)}}</div>
+                  {{firstUserName?.substring(0,1)}}</div>
               </div>
               <div class="user_info">
                 <span *ngIf="secondUserName!=senderCheck">{{secondUserName}}</span>

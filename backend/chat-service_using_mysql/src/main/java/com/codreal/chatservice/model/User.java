@@ -1,9 +1,11 @@
 package com.codreal.chatservice.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-@Document(collection = "users")
+@Table(name = "users")
+@Entity
 public class User {
 
     @Id
